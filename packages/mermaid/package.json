@@ -1,6 +1,6 @@
 {
-  "name": "mermaid",
-  "version": "10.1.0",
+  "name": "fork-mermaid",
+  "version": "1.0.0-beta.2",
   "description": "Markdown-ish syntax for generating flowcharts, sequence diagrams, class diagrams, gantt charts and git graphs.",
   "type": "module",
   "module": "./dist/mermaid.core.mjs",
@@ -53,7 +53,6 @@
   },
   "dependencies": {
     "@braintree/sanitize-url": "^6.0.0",
-    "@khanacademy/simple-markdown": "^0.8.6",
     "cytoscape": "^3.23.0",
     "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-fcose": "^2.1.0",

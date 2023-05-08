@@ -1,4 +1,4 @@
-import SimpleMarkdown from '@khanacademy/simple-markdown';
+import SimpleMarkdown from './simple-markdown';
 
 /**
  *
