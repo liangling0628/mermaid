@@ -56,9 +56,9 @@ export const draw = function (text: string, id: string, version: string, diagObj
   svg.append('g');
 
   //4. Fetch the diagram data
-  // @ts-expect-error - db not typed yet
+  // _@ts-expect-error - db not typed yet
   const tasks: TimelineTask[] = diagObj.db.getTasks();
-  // @ts-expect-error - db not typed yet
+  // _@ts-expect-error - db not typed yet
   const title = diagObj.db.getCommonDb().getDiagramTitle();
   log.debug('task', tasks);
 
@@ -66,7 +66,7 @@ export const draw = function (text: string, id: string, version: string, diagObj
   svgDraw.initGraphics(svg);
 
   // fetch Sections
-  // @ts-expect-error - db not typed yet
+  // _@ts-expect-error - db not typed yet
   const sections: string[] = diagObj.db.getSections();
   log.debug('sections', sections);
 

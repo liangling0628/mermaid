@@ -139,7 +139,7 @@ export const positionEdgeLabel = (edge, paths) => {
     let x = edge.x;
     let y = edge.y;
     if (path) {
-      //   // debugger;
+      //   // 
       const pos = utils.calcLabelPosition(path);
       log.info(
         'Moving label ' + edge.label + ' from (',
@@ -166,7 +166,7 @@ export const positionEdgeLabel = (edge, paths) => {
     let x = edge.x;
     let y = edge.y;
     if (path) {
-      // debugger;
+      // 
       const pos = utils.calcTerminalLabelPosition(edge.arrowTypeStart ? 10 : 0, 'start_left', path);
       x = pos.x;
       y = pos.y;
@@ -178,7 +178,7 @@ export const positionEdgeLabel = (edge, paths) => {
     let x = edge.x;
     let y = edge.y;
     if (path) {
-      // debugger;
+      // 
       const pos = utils.calcTerminalLabelPosition(
         edge.arrowTypeStart ? 10 : 0,
         'start_right',
@@ -194,7 +194,7 @@ export const positionEdgeLabel = (edge, paths) => {
     let x = edge.x;
     let y = edge.y;
     if (path) {
-      // debugger;
+      // 
       const pos = utils.calcTerminalLabelPosition(edge.arrowTypeEnd ? 10 : 0, 'end_left', path);
       x = pos.x;
       y = pos.y;
@@ -206,7 +206,7 @@ export const positionEdgeLabel = (edge, paths) => {
     let x = edge.x;
     let y = edge.y;
     if (path) {
-      // debugger;
+      // 
       const pos = utils.calcTerminalLabelPosition(edge.arrowTypeEnd ? 10 : 0, 'end_right', path);
       x = pos.x;
       y = pos.y;

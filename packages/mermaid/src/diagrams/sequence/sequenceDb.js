@@ -1,7 +1,7 @@
-import mermaidAPI from '../../mermaidAPI';
-import * as configApi from '../../config';
-import { log } from '../../logger';
-import { sanitizeText } from '../common/common';
+import mermaidAPI from '../../mermaidAPI.ts';
+import * as configApi from '../../config.ts';
+import { log } from '../../logger.ts';
+import { sanitizeText } from '../common/common.ts';
 import {
   setAccTitle,
   getAccTitle,
@@ -10,7 +10,8 @@ import {
   getAccDescription,
   setAccDescription,
   clear as commonClear,
-} from '../../commonDb';
+} from '../../commonDb.ts';
+import { getIsMatch } from './svgDraw.js';
 
 let prevActor = undefined;
 let actors = {};
@@ -120,7 +121,8 @@ export const addSignal = function (
   idFrom,
   idTo,
   message = { text: undefined, wrap: undefined },
-  messageType
+  messageType,
+  data = undefined
 ) {
   if (messageType === LINETYPE.ACTIVE_END) {
     const cnt = activationCount(idFrom.actor);
@@ -143,6 +145,7 @@ export const addSignal = function (
     message: message.text,
     wrap: (message.wrap === undefined && autoWrap()) || !!message.wrap,
     type: messageType,
+    data
   });
   return true;
 };
@@ -467,7 +470,15 @@ export const apply = function (param) {
         addSignal(param.actor, undefined, undefined, param.signalType);
         break;
       case 'activeEnd':
-        addSignal(param.actor, undefined, undefined, param.signalType);
+        // eslint-disable-next-line no-case-declarations
+        let data;
+        if(param.data && param.data.text) {
+         const isMatchText = getIsMatch(param.data.text)
+         if(isMatchText) {
+          data ={id: isMatchText}
+         }
+        }
+        addSignal(param.actor, undefined, undefined, param.signalType, data);
         break;
       case 'addNote':
         addNote(param.actor, param.placement, param.text);

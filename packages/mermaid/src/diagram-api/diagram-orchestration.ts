@@ -1,22 +1,22 @@
-import c4 from '../diagrams/c4/c4Detector';
-import flowchart from '../diagrams/flowchart/flowDetector';
-import flowchartV2 from '../diagrams/flowchart/flowDetector-v2';
-import er from '../diagrams/er/erDetector';
-import git from '../diagrams/git/gitGraphDetector';
-import gantt from '../diagrams/gantt/ganttDetector';
-import info from '../diagrams/info/infoDetector';
-import pie from '../diagrams/pie/pieDetector';
-import requirement from '../diagrams/requirement/requirementDetector';
+// import c4 from '../diagrams/c4/c4Detector';
+// import flowchart from '../diagrams/flowchart/flowDetector';
+// import flowchartV2 from '../diagrams/flowchart/flowDetector-v2';
+// import er from '../diagrams/er/erDetector';
+// import git from '../diagrams/git/gitGraphDetector';
+// import gantt from '../diagrams/gantt/ganttDetector';
+// import info from '../diagrams/info/infoDetector';
+// import pie from '../diagrams/pie/pieDetector';
+// import requirement from '../diagrams/requirement/requirementDetector';
 import sequence from '../diagrams/sequence/sequenceDetector';
-import classDiagram from '../diagrams/class/classDetector';
-import classDiagramV2 from '../diagrams/class/classDetector-V2';
-import state from '../diagrams/state/stateDetector';
-import stateV2 from '../diagrams/state/stateDetector-V2';
-import journey from '../diagrams/user-journey/journeyDetector';
+// import classDiagram from '../diagrams/class/classDetector';
+// import classDiagramV2 from '../diagrams/class/classDetector-V2';
+// import state from '../diagrams/state/stateDetector';
+// import stateV2 from '../diagrams/state/stateDetector-V2';
+// import journey from '../diagrams/user-journey/journeyDetector';
 import errorDiagram from '../diagrams/error/errorDiagram';
-import flowchartElk from '../diagrams/flowchart/elk/detector';
-import timeline from '../diagrams/timeline/detector';
-import mindmap from '../diagrams/mindmap/detector';
+// import flowchartElk from '../diagrams/flowchart/elk/detector';
+// import timeline from '../diagrams/timeline/detector';
+// import mindmap from '../diagrams/mindmap/detector';
 import { registerLazyLoadedDiagrams } from './detectType';
 import { registerDiagram } from './diagramAPI';
 
@@ -60,23 +60,23 @@ export const addDiagrams = () => {
   );
   // Ordering of detectors is important. The first one to return true will be used.
   registerLazyLoadedDiagrams(
-    c4,
-    classDiagramV2,
-    classDiagram,
-    er,
-    gantt,
-    info,
-    pie,
-    requirement,
+    // c4,
+    // classDiagramV2,
+    // classDiagram,
+    // er,
+    // gantt,
+    // info,
+    // pie,
+    // requirement,
     sequence,
-    flowchartElk,
-    flowchartV2,
-    flowchart,
-    mindmap,
-    timeline,
-    git,
-    stateV2,
-    state,
-    journey
+    // flowchartElk,
+    // flowchartV2,
+    // flowchart,
+    // mindmap,
+    // timeline,
+    // git,
+    // stateV2,
+    // state,
+    // journey
   );
 };

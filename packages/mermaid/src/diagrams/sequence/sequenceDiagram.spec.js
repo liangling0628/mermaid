@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
-import * as configApi from '../../config';
-import mermaidAPI from '../../mermaidAPI';
+import * as configApi from '../../config.ts';
+import mermaidAPI from '../../mermaidAPI.ts';
 import { Diagram, getDiagramFromText } from '../../Diagram';
 import { addDiagrams } from '../../diagram-api/diagram-orchestration';
 

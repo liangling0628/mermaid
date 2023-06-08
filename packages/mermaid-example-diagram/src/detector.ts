@@ -1,4 +1,4 @@
-import type { ExternalDiagramDefinition } from 'mermaid';
+import type { ExternalDiagramDefinition } from 'fork-mermaid';
 
 const id = 'example-diagram';
 

@@ -293,7 +293,7 @@ signal
 	             ]}
 	| actor signaltype '-' actor text2
 	{ $$ = [$1,$4,{type: 'addMessage', from:$1.actor, to:$4.actor, signalType:$2, msg:$5},
-	             {type: 'activeEnd', signalType: yy.LINETYPE.ACTIVE_END, actor: $1}
+	             {type: 'activeEnd', signalType: yy.LINETYPE.ACTIVE_END, actor: $1, data:$5}
 	             ]}
 	| actor signaltype actor text2
 	{ $$ = [$1,$3,{type: 'addMessage', from:$1.actor, to:$3.actor, signalType:$2, msg:$4}]}

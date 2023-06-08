@@ -359,7 +359,7 @@ const setupToolTips = function (element: Element) {
   const nodes = svg.selectAll('g.node');
   nodes
     .on('mouseover', function () {
-      // @ts-expect-error - select is not part of the d3 type definition
+      // _@ts-expect-error - select is not part of the d3 type definition
       const el = select(this);
       const title = el.attr('title');
       // Don't try to draw a tooltip if no data is provided
@@ -379,7 +379,7 @@ const setupToolTips = function (element: Element) {
     })
     .on('mouseout', function () {
       tooltipElem.transition().duration(500).style('opacity', 0);
-      // @ts-expect-error - select is not part of the d3 type definition
+      // _@ts-expect-error - select is not part of the d3 type definition
       const el = select(this);
       el.classed('hover', false);
     });

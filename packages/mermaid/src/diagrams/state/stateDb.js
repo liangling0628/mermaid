@@ -111,7 +111,7 @@ const docTranslator = (parent, node, first) => {
       let i;
       for (i = 0; i < node.doc.length; i++) {
         if (node.doc[i].type === DIVIDER_TYPE) {
-          // debugger;
+          // 
           const newNode = clone(node.doc[i]);
           newNode.doc = clone(currentDoc);
           doc.push(newNode);

@@ -1,4 +1,4 @@
-import mermaid, { type MermaidConfig } from 'mermaid';
+import mermaid, { type MermaidConfig } from 'fork-mermaid';
 
 export const render = async (id: string, code: string, config: MermaidConfig): Promise<string> => {
   mermaid.initialize(config);

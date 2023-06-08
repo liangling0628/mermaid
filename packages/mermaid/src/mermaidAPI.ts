@@ -13,8 +13,7 @@
 // @ts-ignore TODO: Investigate D3 issue
 import { select } from 'd3';
 import { compile, serialize, stringify } from 'stylis';
-// @ts-ignore: TODO Fix ts errors
-import { version } from '../package.json';
+// import { version } from '../package.json';
 import * as configApi from './config';
 import { addDiagrams } from './diagram-api/diagram-orchestration';
 import { Diagram, getDiagramFromText } from './Diagram';
@@ -30,7 +29,7 @@ import { evaluate } from './diagrams/common/common';
 import isEmpty from 'lodash-es/isEmpty.js';
 import { setA11yDiagramInfo, addSVGa11yTitleDescription } from './accessibility';
 import { parseDirective } from './directiveUtils';
-
+const version = '1.0.0-beta.2'
 // diagram names that support classDef statements
 const CLASSDEF_DIAGRAMS = [
   'graph',
@@ -411,6 +410,7 @@ const render = async function (
   const iFrameID_selector = '#' + iFrameID;
   const enclosingDivID = 'd' + id;
   const enclosingDivID_selector = '#' + enclosingDivID;
+  
 
   let root: any = select('body');
 

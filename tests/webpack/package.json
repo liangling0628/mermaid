@@ -17,7 +17,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "mermaid": "workspace:*",
+    "fork-mermaid": "workspace:*",
     "@mermaid-js/mermaid-example-diagram": "workspace:*"
   }
 }

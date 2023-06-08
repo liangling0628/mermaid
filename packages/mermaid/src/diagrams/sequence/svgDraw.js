@@ -1,6 +1,6 @@
-import common from '../common/common';
-import { addFunction } from '../../interactionDb';
-import { parseFontSize } from '../../utils';
+import common from '../common/common.ts';
+import { addFunction } from '../../interactionDb.ts';
+import { parseFontSize } from '../../utils.ts';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export const drawRect = function (elem, rectData) {
@@ -13,7 +13,8 @@ export const drawRect = function (elem, rectData) {
   rectElem.attr('height', rectData.height);
   rectElem.attr('rx', rectData.rx);
   rectElem.attr('ry', rectData.ry);
-
+  rectElem.attr('data-id', rectData.dataid);
+  
   if (rectData.class !== undefined) {
     rectElem.attr('class', rectData.class);
   }
@@ -255,16 +256,22 @@ export const drawText = function (elem, textData) {
     } else if (dy !== 0) {
       textElem.attr('dy', dy);
     }
-
+    const isMatchText = getIsMatch(line)
+    if(isMatchText) {
+      textElem.attr('data-id', isMatchText)
+    }
     if (textData.tspan) {
       const span = textElem.append('tspan');
       span.attr('x', textData.x);
       if (textData.fill !== undefined) {
         span.attr('fill', textData.fill);
       }
-      span.text(line);
+      if(isMatchText) {
+        span.attr('data-id', isMatchText)
+      }
+      span.text(line.replace(/\s?is\s([\S\s]+$)/, ''));
     } else {
-      textElem.text(line);
+      textElem.text(line.replace(/\s?is\s([\S\s]+$)/, ''));
     }
     if (
       textData.valign !== undefined &&
@@ -334,7 +341,16 @@ export const fixLifeLineHeights = (diagram, bounds) => {
     .attr('class', '200')
     .attr('y2', bounds - 55);
 };
-
+export const getIsMatch = (text) => {
+  if(typeof text !== 'string' || !text) {
+    return false;
+  }
+  const matchs = text.match(/\s?is\s([\S\s]+$)/);
+  if(matchs && matchs.length && matchs[1]) {
+    return matchs[1];
+  }
+  return false;
+}
 /**
  * Draws an actor in the diagram with the attached line
  *
@@ -385,6 +401,12 @@ const drawActorTypeParticipant = function (elem, actor, conf, isFooter) {
   rect.class = cssclass;
   rect.rx = 3;
   rect.ry = 3;
+  const dataId = getIsMatch(actor.name) || getIsMatch(actor.description)
+  let text = actor.description
+  if(dataId) {
+    rect.dataid = dataId
+    text = actor.description.replace(/\s?is\s([\S\s]+$)/, '')
+  }
   const rectElem = drawRect(g, rect);
   actor.rectData = rect;
 
@@ -398,13 +420,13 @@ const drawActorTypeParticipant = function (elem, actor, conf, isFooter) {
   }
 
   _drawTextCandidateFunc(conf)(
-    actor.description,
+    text,
     g,
     rect.x,
     rect.y,
     rect.width,
     rect.height,
-    { class: 'actor' },
+    { class: 'actor', dataid: rect.dataid },
     conf
   );
 
@@ -513,16 +535,21 @@ export const drawActor = function (elem, actor, conf, isFooter) {
 export const drawBox = function (elem, box, conf) {
   const boxplustextGroup = elem.append('g');
   const g = boxplustextGroup;
-  drawBackgroundRect(g, box);
+  const isMatchText = getIsMatch(box.name)
+  if(isMatchText) {
+    g.attr('data-id', isMatchText)
+  }
+  g.attr('class', 'graph-box')
+  drawBackgroundRect(g, {...box, dataid: isMatchText});
   if (box.name) {
     _drawTextCandidateFunc(conf)(
-      box.name,
+      box.name.replace(/\s?is\s([\S\s]+$)/, ''),
       g,
       box.x,
       box.y + (box.textMaxHeight || 0) / 2,
       box.width,
       0,
-      { class: 'text' },
+      { class: 'text graph-box-text', dataid: isMatchText },
       conf
     );
   }
@@ -540,8 +567,9 @@ export const anchorElement = function (elem) {
  * @param {any} verticalPos - Precise y coordinate of bottom activation box edge.
  * @param {any} conf - Sequence diagram config object.
  * @param {any} actorActivations - Number of activations on the actor.
+ * @param {any} data - data of activations on the actor.
  */
-export const drawActivation = function (elem, bounds, verticalPos, conf, actorActivations) {
+export const drawActivation = function (elem, bounds, verticalPos, conf, actorActivations, data) {
   const rect = getNoteRect();
   const g = bounds.anchored;
   rect.x = bounds.startx;
@@ -549,6 +577,9 @@ export const drawActivation = function (elem, bounds, verticalPos, conf, actorAc
   rect.class = 'activation' + (actorActivations % 3); // Will evaluate to 0, 1 or 2
   rect.width = bounds.stopx - bounds.startx;
   rect.height = verticalPos - bounds.starty;
+  if(data && data.id) {
+    rect['dataid'] = data.id
+  }
   drawRect(g, rect);
 };
 
@@ -664,11 +695,14 @@ export const drawBackgroundRect = function (elem, bounds) {
   const rectElem = drawRect(elem, {
     x: bounds.startx,
     y: bounds.starty,
+    rx: 4,
+    ry: 4,
     width: bounds.stopx - bounds.startx,
     height: bounds.stopy - bounds.starty,
     fill: bounds.fill,
     stroke: bounds.stroke,
-    class: 'rect',
+    class: 'rect graph-box-rect',
+    dataid: bounds.dataid
   });
   rectElem.lower();
 };
@@ -823,8 +857,9 @@ export const getNoteRect = function () {
   return {
     x: 0,
     y: 0,
-    fill: '#EDF2AE',
-    stroke: '#666',
+    // fill: '#EDF2AE',
+    fill: '#FFDDDD',
+    stroke: '#63656E',
     width: 100,
     anchor: 'start',
     height: 100,
@@ -875,6 +910,7 @@ const _drawTextCandidateFunc = (function () {
         .append('text')
         .attr('x', x + width / 2)
         .attr('y', y)
+        .attr('data-id', textAttrs['dataid'])
         .style('text-anchor', 'middle')
         .style('font-size', _actorFontSizePx)
         .style('font-weight', actorFontWeight)
@@ -883,6 +919,7 @@ const _drawTextCandidateFunc = (function () {
         .append('tspan')
         .attr('x', x + width / 2)
         .attr('dy', dy)
+        .attr('data-id', textAttrs['dataid'])
         .text(lines[i]);
 
       text

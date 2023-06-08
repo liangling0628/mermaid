@@ -848,7 +848,7 @@ export const draw = async function (text, id, _version, diagObj) {
     );
   }
 
-  // debugger;
+  // 
   // Add an element in the svg to be used to hold the subgraphs container
   // elements
   const subGraphsEl = svg.insert('g').attr('class', 'subgraphs');

@@ -1,9 +1,10 @@
 // @ts-nocheck TODO: fix file
 import { select, selectAll } from 'd3';
-import svgDraw, { drawText, fixLifeLineHeights } from './svgDraw';
-import { log } from '../../logger';
+import svgDraw, { drawText, fixLifeLineHeights, getIsMatch } from './svgDraw';
+import { log } from '../../logger.ts';
+
 import common from '../common/common';
-import * as configApi from '../../config';
+import * as configApi from '../../config.ts';
 import assignWithDepth from '../../assignWithDepth';
 import utils from '../../utils';
 import { configureSvgSize } from '../../setupGraphViewbox';
@@ -306,7 +307,7 @@ function boundMessage(_diagram, msgModel): number {
   bounds.bumpVerticalPos(lineHeight);
 
   let lineStartY;
-  let totalOffset = textDims.height - 10;
+  let totalOffset = textDims.height - 25;
   const textWidth = textDims.width;
 
   if (startx === stopx) {
@@ -315,18 +316,18 @@ function boundMessage(_diagram, msgModel): number {
       totalOffset += conf.boxMargin;
       lineStartY = bounds.getVerticalPos() + totalOffset;
     }
-    totalOffset += 30;
+    totalOffset += 15;
     const dx = Math.max(textWidth / 2, conf.width / 2);
     bounds.insert(
       startx - dx,
-      bounds.getVerticalPos() - 10 + totalOffset,
+      bounds.getVerticalPos() - 20 + totalOffset,
       stopx + dx,
-      bounds.getVerticalPos() + 30 + totalOffset
+      bounds.getVerticalPos() + 15 + totalOffset
     );
   } else {
     totalOffset += conf.boxMargin;
     lineStartY = bounds.getVerticalPos() + totalOffset;
-    bounds.insert(startx, lineStartY - 10, stopx, lineStartY);
+    bounds.insert(startx, lineStartY - 25, stopx, lineStartY);
   }
   bounds.bumpVerticalPos(totalOffset);
   msgModel.height += totalOffset;
@@ -349,7 +350,8 @@ const drawMessage = function (diagram, msgModel, lineStartY: number, diagObj: Di
   const textDims = utils.calculateTextDimensions(message, messageFont(conf));
   const textObj = svgDraw.getTextObj();
   textObj.x = startx;
-  textObj.y = starty + 10;
+  // textObj.y = starty + 10;
+  textObj.y = starty + 2;
   textObj.width = stopx - startx;
   textObj.class = 'messageText';
   textObj.dy = '1em';
@@ -363,7 +365,7 @@ const drawMessage = function (diagram, msgModel, lineStartY: number, diagObj: Di
   textObj.tspan = false;
 
   drawText(diagram, textObj);
-
+  const isMatchText = getIsMatch(textObj.text)
   const textWidth = textDims.width;
 
   let line;
@@ -446,7 +448,9 @@ const drawMessage = function (diagram, msgModel, lineStartY: number, diagObj: Di
   if (type === diagObj.db.LINETYPE.SOLID_CROSS || type === diagObj.db.LINETYPE.DOTTED_CROSS) {
     line.attr('marker-end', 'url(' + url + '#crosshead)');
   }
-
+  if(isMatchText) {
+    line.attr('data-id', isMatchText)
+  }
   // add node number
   if (sequenceVisible || conf.showSequenceNumbers) {
     line.attr('marker-start', 'url(' + url + '#sequencenumber)');
@@ -650,6 +654,7 @@ export const draw = function (_text: string, id: string, _version: string, diagO
 
   // Fetch data from the parsing
   const actors = diagObj.db.getActors();
+  console.info(actors, '===========')
   const boxes = diagObj.db.getBoxes();
   const actorKeys = diagObj.db.getActorKeys();
   const messages = diagObj.db.getMessages();
@@ -694,7 +699,8 @@ export const draw = function (_text: string, id: string, _version: string, diagO
       activationData,
       verticalPos,
       conf,
-      actorActivations(msg.from.actor).length
+      actorActivations(msg.from.actor).length,
+      msg.data
     );
 
     bounds.insert(activationData.startx, verticalPos - 10, activationData.stopx, verticalPos);
@@ -896,7 +902,7 @@ export const draw = function (_text: string, id: string, _version: string, diagO
     bounds.bumpVerticalPos(conf.boxMargin);
     fixLifeLineHeights(diagram, bounds.getVerticalPos());
   }
-
+  
   bounds.models.boxes.forEach(function (box) {
     box.height = bounds.getVerticalPos() - box.y;
     bounds.insert(box.x, box.y, box.x + box.width, box.height);
